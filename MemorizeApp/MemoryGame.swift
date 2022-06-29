@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MemoryGame<CardContent: Equatable> {
+struct MemoryGame<CardContent: Equatable & StringProtocol> {
     private(set) var cards: [Card]
     
     private var indexOfTheOneAndOnlyFaceUpCard: Int? {
@@ -22,7 +22,7 @@ struct MemoryGame<CardContent: Equatable> {
             cards.append(Card(content: content, id: pairIndex * 2))
             cards.append(Card(content: content, id: pairIndex * 2 + 1))
         }
-//        cards.shuffle()
+        cards.shuffle()
     }
     
     mutating func choose(_ card: Card) {
@@ -50,7 +50,7 @@ struct MemoryGame<CardContent: Equatable> {
 }
 
 extension MemoryGame {
-    struct Card: Identifiable {
+    struct Card: Identifiable, Equatable {
         var isFaceUp = false {
             didSet {
                 if isFaceUp {
