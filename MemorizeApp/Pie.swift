@@ -1,0 +1,41 @@
+//
+//  Pie.swift
+//  MemorizeApp
+//
+//  Created by Дарья Леонова on 13.06.2022.
+//
+
+import SwiftUI
+
+struct Pie: Shape {
+    var startAngle: Angle
+    var endAngle: Angle
+    var clockwise: Bool = false
+    
+    var animatableData: AnimatablePair<Double, Double> {
+        get {
+            AnimatablePair(startAngle.radians, endAngle.radians)
+        }
+        set {
+            startAngle = Angle.radians(newValue.first)
+            endAngle = Angle.radians(newValue.second)
+        }
+    }
+    
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let radius = min(rect.width, rect.height) / 2
+        let center = CGPoint(x: rect.midX, y: rect.midY)
+        let start = CGPoint(
+            x: center.x + radius * CGFloat(cos(startAngle.radians)),
+            y: center.y + radius * sin(startAngle.radians)
+        )
+        
+        path.move(to: center)
+        path.addLine(to: start)
+        path.addArc(center: center, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: !clockwise)
+        path.addLine(to: center)
+        
+        return path
+    }
+}
